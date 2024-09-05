@@ -2,7 +2,6 @@ import { IoIosArrowForward } from "react-icons/io";
 import { CgNotes } from "react-icons/cg";
 import { LuClipboardCheck } from "react-icons/lu";
 import { MdOutlineAccountBox } from "react-icons/md";
-import { RiAccountCircleLine } from "react-icons/ri";
 import { RiBankLine } from "react-icons/ri";
 import { HiMenuAlt1 } from "react-icons/hi";
 import Dialog from '../components/Dialog';
@@ -13,12 +12,17 @@ import GoogleMap from "../assets/images/penn1.webp"
 
 function RiderOrder() {
 
-    const [open, setOpen] = useState(false)
+    // นำ param ที่อยู่ใน path มาใช้โดยชื่อต้องตรงกับที่กำหนดไว้ในเส้นทางที่ไฟล์ App.jsx
     const { order_id } = useParams()
+    // ใช้สำหรับนำทางไปหน้าอื่น
     const navigate = useNavigate()
-    const [order, setOrder] = useState([])
+    // กำหนดการเปิด ปิด ของ Dialog สำหรับตอนหน้าจอ Mobile
+    const [open, setOpen] = useState(false)
 
-    const fetchAllOrder = async () => {
+    // ตัวแปรสำหรับ React โดยตัวแรกคือ ข้อมูล ตัวที่สองคือ function สำหรับการ set ค่าให้กับตัวแปร
+    const [order, setOrder] = useState(null)
+
+    const fetchOrderById = async () => {
         try {
             const response = await axios.get("http://localhost:3000/orders/" + order_id)
             setOrder(response.data)
@@ -27,12 +31,11 @@ function RiderOrder() {
         }
     }
 
+    // useEffect จะทำงานในทุกครั้งที่ Component ถูก render
     useEffect(() => {
-        fetchAllOrder()
-
+        // ทำงานในนี้ทุกครั้งที่ หน้า จอถูก render ใหม่
+        fetchOrderById()
     }, [])
-
-
 
     return (
         <div>
@@ -96,9 +99,9 @@ function RiderOrder() {
 
                         <div className="bg-[#f5ebdc] w-[100%] flex-col p-7 rounded-lg">
                             <div className="text-[#714b3c] text-[27px] font-semibold">ออเดอร์ {order_id}</div>
-                            <div className="bg-white my-4 h-[50px] flex items-center rounded-lg text-[#714b3c] text-[18px] pl-6">รหัสคำสั่งซื้อ : {order.id}</div>
-                            <div className="bg-white my-4 h-[50px] flex items-center rounded-lg text-[#714b3c] text-[18px] pl-6">ที่อยู่ลูกค้า : {order.destination}</div>
-                            <div className="bg-white my-4 h-[50px] flex items-center rounded-lg text-[#714b3c] text-[18px] pl-6">เบอร์ติดต่อผู้รับ : {order.phone_number}</div>
+                            <div className="bg-white my-4 h-[50px] flex items-center rounded-lg text-[#714b3c] text-[18px] pl-6">รหัสคำสั่งซื้อ : {order?.id}</div>
+                            <div className="bg-white my-4 h-[50px] flex items-center rounded-lg text-[#714b3c] text-[18px] pl-6">ที่อยู่ลูกค้า : {order?.destination}</div>
+                            <div className="bg-white my-4 h-[50px] flex items-center rounded-lg text-[#714b3c] text-[18px] pl-6">เบอร์ติดต่อผู้รับ : {order?.phone_number}</div>
                             <div className="flex pl-10 sm:flex-col sm:pl-0">
                                 {/* Google map */}
                                 <div className="flex border-[#502314] border-[5px] w-fit rounded-md">

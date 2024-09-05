@@ -1,16 +1,20 @@
 import './App.css'
-import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import RiderOrders from './pages/RiderOrders';
 import RiderOrder from './pages/RiderOrder';
+import Login from './pages/Login'
+import Register from './pages/Register'
+
+// Tag ที่เป็นรูปแบบนี้จะเรียกว่า Component 
+// <ComponentName />
 
 function App() {
-
-  const [open, setOpen] = useState(false)
-
+  //กำหนดเส้นทางให้กับแต่ละ path
   return (
     <BrowserRouter>
       <Routes>
+        {/* ตัวอย่าง : ถ้าผู้ใช้มาที่ path / จะแสดงผลหน้า RiderOrders */}
         <Route
           path="/"
           element={<RiderOrders />}
@@ -19,9 +23,18 @@ function App() {
           path="/rider-orders"
           element={<RiderOrders />}
         />
+        {/* router ที่มี param ใช้เครื่องหมาย : ตามด้วยชื่อ param */}
         <Route
           path="/rider-order/:order_id"
           element={<RiderOrder />}
+        />
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+        <Route
+          path="/register"
+          element={<Register />}
         />
       </Routes>
     </BrowserRouter>
