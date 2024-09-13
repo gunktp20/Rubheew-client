@@ -13,6 +13,7 @@ import RequireVendor from "./components/RequireVendor";
 import InsertMenu from "./pages/InsertMenu";
 import MenuManagement from "./pages/MenuManagement";
 import EditMenu from "./pages/EditMenu";
+import OrderStatus from "./pages/OrderStatus";
 
 // Tag ที่เป็นรูปแบบนี้จะเรียกว่า Component
 // <ComponentName />
@@ -60,6 +61,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/order-status" element={<OrderStatus />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/vendor/register" element={<VendorRegister />} />
