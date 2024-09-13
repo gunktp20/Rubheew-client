@@ -18,13 +18,13 @@ function RiderOrder() {
     const navigate = useNavigate()
     // กำหนดการเปิด ปิด ของ Dialog สำหรับตอนหน้าจอ Mobile
     const [open, setOpen] = useState(false)
-
     // ตัวแปรสำหรับ React โดยตัวแรกคือ ข้อมูล ตัวที่สองคือ function สำหรับการ set ค่าให้กับตัวแปร
     const [order, setOrder] = useState(null)
 
     const fetchOrderById = async () => {
         try {
-            const response = await axios.get("http://localhost:3000/orders/" + order_id)
+            const response = await axios.get("http://localhost:5000/orders/" + order_id)
+            console.log(response.data)
             setOrder(response.data)
         } catch (err) {
             console.log(err)

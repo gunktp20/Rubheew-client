@@ -1,8 +1,8 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-// import RiderOrders from "./pages/RiderOrders";
-// import RiderOrder from "./pages/RiderOrder";
+import RiderOrders from "./pages/RiderOrders";
+import RiderOrder from "./pages/RiderOrder";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -68,27 +68,15 @@ function App() {
         <Route path="/vendor/login" element={<VendorLogin />} />
         <Route path="*" element={<div>ไม่พบหน้าที่คุณต้องการ</div>} />
         {/* ตัวอย่าง : ถ้าผู้ใช้มาที่ path / จะแสดงผลหน้า RiderOrders */}
-        {/* <Route
-          path="/"
-          element={<RiderOrders />}
-        />
         <Route
           path="/rider-orders"
           element={<RiderOrders />}
-        /> */}
+        />
         {/* router ที่มี param ใช้เครื่องหมาย : ตามด้วยชื่อ param */}
-        {/* <Route
+        <Route
           path="/rider-order/:order_id"
           element={<RiderOrder />}
         />
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-        <Route
-          path="/register"
-          element={<Register />}
-        /> */}
       </Routes>
     </BrowserRouter>
   );

@@ -21,7 +21,7 @@ function RiderOrders() {
   // ดึงข้อมูลจาก API เพื่อเรียกดูข้อมูล orders ทั้งหมดของ rider คนนั้นๆ
   const fetchAllOrders = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/orders")
+      const response = await axios.get("http://localhost:5000/orders")
       setOrders(response.data)
     } catch (err) {
       console.log(err)
