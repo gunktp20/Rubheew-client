@@ -60,6 +60,11 @@ function RiderOrder() {
         fetchOrderById()
     }, [])
 
+    const mapContainerStyle = {
+        width: '100%',
+        height: '400px',
+      };
+
     return (
         <div>
             {/* Main container */}
