@@ -12,7 +12,7 @@ import React from "react";
 import { GoogleMap, LoadScript, Marker, DirectionsRenderer } from '@react-google-maps/api';
 
 function RiderOrder() {
-    
+
     const [destination, setDestination] = React.useState(null);
     // นำ param ที่อยู่ใน path มาใช้โดยชื่อต้องตรงกับที่กำหนดไว้ในเส้นทางที่ไฟล์ App.jsx
     const { order_id } = useParams()
@@ -36,23 +36,23 @@ function RiderOrder() {
     const mapOptions = {
         disableDefaultUI: true, // ปิดการแสดง UI ปกติของ Google Maps
         styles: [
-          {
-            featureType: "poi", // ปิดการแสดงสถานที่อื่นๆ เช่น ร้านอาหาร
-            elementType: "labels",
-            stylers: [{ visibility: "on" }],
-          },
-          {
-            featureType: "transit", // ปิดการแสดงระบบขนส่งสาธารณะ
-            elementType: "labels",
-            stylers: [{ visibility: "off" }],
-          },
-          {
-            featureType: "road",
-            elementType: "labels",
-            stylers: [{ visibility: "off" }],
-          },
+            {
+                featureType: "poi", // ปิดการแสดงสถานที่อื่นๆ เช่น ร้านอาหาร
+                elementType: "labels",
+                stylers: [{ visibility: "on" }],
+            },
+            {
+                featureType: "transit", // ปิดการแสดงระบบขนส่งสาธารณะ
+                elementType: "labels",
+                stylers: [{ visibility: "off" }],
+            },
+            {
+                featureType: "road",
+                elementType: "labels",
+                stylers: [{ visibility: "off" }],
+            },
         ],
-      };
+    };
 
     // useEffect จะทำงานในทุกครั้งที่ Component ถูก render
     useEffect(() => {
@@ -63,7 +63,8 @@ function RiderOrder() {
     const mapContainerStyle = {
         width: '100%',
         height: '400px',
-      };
+        marginRight:'30px',
+    };
 
     return (
         <div>
@@ -132,7 +133,6 @@ function RiderOrder() {
                             <div className="bg-white my-4 h-[50px] flex items-center rounded-lg text-[#714b3c] text-[18px] pl-6">เบอร์ติดต่อผู้รับ : {order?.phone_number}</div>
                             <div className="flex pl-10 sm:flex-col sm:pl-0">
                                 {/* Google map */}
-                                <div className="flex border-[#502314] border-[5px] w-fit rounded-md">
                                     <LoadScript
                                         googleMapsApiKey={"AIzaSyDakKAIrjvqKRXzVvOfJut27nHbJ94SMTo"}
                                         libraries={["places"]}
@@ -140,17 +140,17 @@ function RiderOrder() {
                                     >
                                         <GoogleMap
                                             mapContainerStyle={mapContainerStyle}
-                                            center={order.position}
+                                            center={order?.position}
                                             zoom={15}
                                             options={mapOptions}
                                         >
                                             {/* <Marker position={origin} /> */}
-                                            <Marker position={order.position} />
+                                            <Marker position={order?.position} />
 
                                             {/* {directionsResponse && <DirectionsRenderer directions={directionsResponse} />} */}
                                         </GoogleMap>
                                     </LoadScript>
-                                </div>
+
                                 {/* Google map */}
                                 <div className="flex rounded-md flex-grow sm:mt-5">
                                     <div className="flex justify-end items-end w-[100%] gap-4">
