@@ -107,14 +107,11 @@ function OrderStatus() {
     // fetchDirections();
   }, []);
 
-  // 
   const [destination, setDestination] = React.useState(null);
 
   const handleChange = (event) => {
-    
     setDestination(event.target.value);
   };
-
 
   return (
     <div>
@@ -123,9 +120,6 @@ function OrderStatus() {
         <div className="text-[35px] mr-6">{"<"}</div>
         <div className="text-[20px] font-semibold">ก๋วยเตี๋ยวหมูสด</div>
       </button>
-
-
-
       <div className="flex flex-col w-[100%] justify-center items-center pt-10">
         <FormControl variant="standard" sx={{ m: 1, minWidth: 300 }}>
           <InputLabel id="demo-simple-select-standard-label">เลือกตำแหน่งที่ตั้งของคุณ</InputLabel>
@@ -144,10 +138,9 @@ function OrderStatus() {
           </Select>
         </FormControl>
         <div className="flex w-[48%] gap-6 justify-between md:w-[70%] sm:w-[80%] sm:flex-col md:flex-col">
-
           {/* img */}
           {destination && <LoadScript
-            googleMapsApiKey={import.meta.env.GOOGLE_MAP_API_KEY}
+            googleMapsApiKey={"AIzaSyDakKAIrjvqKRXzVvOfJut27nHbJ94SMTo"}
             libraries={["places"]}
             loadingElement={<div>Loading...</div>}
           >
@@ -164,6 +157,7 @@ function OrderStatus() {
             </GoogleMap>
           </LoadScript>
           }
+          
           {/* status */}
           {destination && <div className="flex flex-col">
             <div className="text-[24px] text-[#61392b]">
