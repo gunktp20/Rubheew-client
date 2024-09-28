@@ -9,9 +9,10 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import GoogleMap from "../assets/images/penn1.webp"
+import React from "react";
 
 function RiderOrder() {
-    5
+    
     const [destination, setDestination] = React.useState(null);
     // นำ param ที่อยู่ใน path มาใช้โดยชื่อต้องตรงกับที่กำหนดไว้ในเส้นทางที่ไฟล์ App.jsx
     const { order_id } = useParams()
