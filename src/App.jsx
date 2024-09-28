@@ -14,6 +14,7 @@ import InsertMenu from "./pages/InsertMenu";
 import MenuManagement from "./pages/MenuManagement";
 import EditMenu from "./pages/EditMenu";
 import OrderStatus from "./pages/OrderStatus";
+import SelectDirection from "./pages/SelectDirection";
 
 // Tag ที่เป็นรูปแบบนี้จะเรียกว่า Component
 // <ComponentName />
@@ -61,6 +62,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/select-direction" element={<SelectDirection />} />
         <Route path="/order-status" element={<OrderStatus />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
