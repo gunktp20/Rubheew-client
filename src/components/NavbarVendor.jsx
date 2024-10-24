@@ -111,10 +111,13 @@ function NavbarVendor({ open, setOpen }) {
           to="/vendor/orders/list"
         >
           ออเดอร์ของร้านค้า
-          <div className=" z-[5] absolute right-[-7px] top-[-4px] bg-[#f63437] text-[#fff] shadow-md text-[11px] rounded-full w-[20px] h-[20px] flex justify-center items-center">{pendingOrders}</div>
+          {pendingOrders > 1 && (
+            <div className=" z-[5] absolute right-[-7px] top-[-4px] bg-[#f63437] text-[#fff] shadow-md text-[11px] rounded-full w-[20px] h-[20px] flex justify-center items-center">
+              {pendingOrders}
+            </div>
+          )}
         </NavLink>
       </div>
-      
 
       <div className="flex">
         <button
