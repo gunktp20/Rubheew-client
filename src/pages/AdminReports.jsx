@@ -89,6 +89,12 @@ function AdminReports() {
                       {report?.content}
                     </div>
                   </div>
+                  <div className="flex gap-4 mb-1 text-sm">
+                    <div className="text-sm">เบอร์ติดต่อ</div>
+                    <div className={`text-sm flex items-center text-blue-600`}>
+                      {report?.customer?.phone_number}
+                    </div>
+                  </div>
                   {/*  */}
                   <div className="flex gap-4 mb-1 text-sm">
                     <div className="text-sm">รายงานเมื่อ</div>

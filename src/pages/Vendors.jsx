@@ -163,10 +163,19 @@ function Vendors() {
       {rider && <NavbarRider />}
       {customer && <NavbarCustomer />}
       {admin && <NavbarAdmin />}
-
       {/* <CarouselRubheew /> */}
       <TailwindCarousel />
 
+      <div className="w-[100%] flex justify-center mt-2">
+        <div className="w-[70%] flex flex-col justify-end px-5 md:w-[85%] sm:w-[100%] items-end">
+          <div onClick={()=>{
+            setSelectedCategory("")
+          }} className="text-[13px] cursor-pointer text-[#00000057] hover:text-[#f54749] transition-all">
+            ล้างตัวกรอก
+          </div>
+        </div>
+      </div>
+      <div className="w-[100%]"></div>
       <div className="flex p-5 w-[100%] justify-center sm:p-4">
         <div className="w-[70%] flex flex-col justify-center px-5 md:w-[85%] sm:w-[100%]">
           <Slider {...settings}>
@@ -186,7 +195,6 @@ function Vendors() {
           </Slider>
         </div>
       </div>
-
       <div className="flex mb-6 mt-3 w-[100%] justify-center items-center flex-row sm:flex-col gap-2">
         <div className="w-[65%] md:w-[80%] sm:w-[100%] sm:flex sm:justify-center">
           <div className="w-[400px]">
