@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
 import NavbarVendor from "../components/NavbarVendor";
+import VendorDialog from "../components/VendorDialog";
 
 function InsertMenu() {
   const { token } = useAuth();
@@ -13,6 +14,8 @@ function InsertMenu() {
 
   const [menu_name, setMenuName] = useState("");
   const [category_id, setCategoryId] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [dialog, setDialog] = useState(false);
   const [price, setPrice] = useState(0);
 
   const navigate = useNavigate();
@@ -20,24 +23,23 @@ function InsertMenu() {
   const insertMenu = async () => {
     setError("");
     setSuccess("");
-    if (!menu_name || !category_id || !price) {
+    if (!menu_name || !category_id || !price || !selectedFile) {
       return setError("กรุณากรอกข้อมูลให้ครบถ้วน");
     }
+    const formData = new FormData();
+
+    formData.append("menu_name", menu_name);
+    formData.append("category_id", category_id);
+    formData.append("price", price);
+    formData.append("image", selectedFile);
 
     try {
-      const { data } = await api.post(
-        "/menu/",
-        {
-          menu_name,
-          category_id,
-          price,
+      const { data } = await api.post("/menu/", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      });
       console.log(data);
       setSuccess("เพิ่มเมนูในร้านของคุณ เสร็จสิ้น");
     } catch (err) {
@@ -47,17 +49,48 @@ function InsertMenu() {
     }
   };
 
+  const getCategories = async () => {
+    try {
+      const { data } = await api.get("/category");
+      setCategoryId(data[0].id);
+      setCategories(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState("");
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    setSelectedFile(file);
+    // เช็คว่ามีไฟล์หรือไม่
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreview("");
+    }
+  };
+
   useEffect(() => {
     if (!token) {
       return navigate("/");
     }
+    getCategories();
   }, []);
 
+
   return (
-    <div className="flex flex-col items-center justify-center">
-      {/* <Navbar /> */} 
-      <NavbarVendor/>
-      <div className="flex flex-col justify-center items-center w-[400px] bg-purple-50 gap-3 p-5 border-[2px]">
+    <div className="flex flex-col items-center bg-[#fcfcf9] h-[100vh]">
+      <VendorDialog open={dialog} setOpen={setDialog} />
+      <NavbarVendor open={dialog} setOpen={setDialog} />
+      <div className="flex flex-col justify-center items-center w-[430px] bg-[#fff] gap-3 p-5 border-[1px] shadow-sm rounded-sm">
         <div className="text-xl">เพิ่มเมนูอาหาร</div>
 
         {success && (
@@ -78,17 +111,24 @@ function InsertMenu() {
             setMenuName(e.target.value);
           }}
           name="menu_name"
-          className="w-[100%] h-[32px] pl-2"
+          className="text-sm w-[100%] h-[32px] pl-2 border-[1px] rounded-sm border-[#00000031]"
         ></input>
-        <input
-          placeholder="ประเภทอาหาร"
+        <select
           value={category_id}
-          onChange={(e) => {
-            setCategoryId(e.target.value);
+          onChange={(event) => {
+            setCategoryId(event.target.value);
           }}
-          name="category_id"
-          className="w-[100%] h-[32px] pl-2"
-        ></input>
+          className={`block h-[32px] w-full pl-2 text-[13.5px] text-gray-900 bg-transparent border-[1px] border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-[#f54749] peer`}
+        >
+          {categories?.map((c, index) => {
+            return (
+              <option key={index} value={c.id}>
+                {c?.category_name}
+              </option>
+            );
+          })}
+        </select>
+
         <input
           placeholder="ราคา"
           type="number"
@@ -97,12 +137,36 @@ function InsertMenu() {
             setPrice(e.target.value);
           }}
           name="price"
-          className="w-[100%] h-[32px] pl-2"
+          className="text-sm w-[100%] h-[32px] pl-2 border-[1px] rounded-sm border-[#00000031]"
         ></input>
+
+        <div class="grid w-full items-center gap-4 mt-2">
+          <label class="text-sm text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            อัพโหลดรูปภาพเมนูอาหาร
+          </label>
+          <input
+            class="flex w-full rounded-md border border-[#f54749] border-input bg-white text-sm text-gray-400 file:border-0 file:bg-[#f54749] file:text-white file:text-sm file:font-medium"
+            type="file"
+            id="picture"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </div>
+
+        {preview && (
+          <div>
+            <h3 className="text-sm mb-2">รูปภาพปัจจุบัน</h3>
+            <img
+              src={`${preview}`}
+              alt="Preview"
+              style={{ maxWidth: "300px", maxHeight: "300px" }}
+            />
+          </div>
+        )}
 
         <button
           onClick={insertMenu}
-          className="bg-purple-300 text-white w-[100%] h-[32px]"
+          className="bg-[#f54749] text-white w-[100%] h-[32px]"
         >
           เพิ่มเมนูอาหาร
         </button>

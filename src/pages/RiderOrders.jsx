@@ -1,131 +1,271 @@
-import { IoIosArrowForward } from "react-icons/io";
-import { CgNotes } from "react-icons/cg";
-import { LuClipboardCheck } from "react-icons/lu";
-import { MdOutlineAccountBox } from "react-icons/md";
-import { RiBankLine } from "react-icons/ri";
-import { HiMenuAlt1 } from "react-icons/hi";
-import Dialog from '../components/Dialog';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import api from "../service/api";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import VendorDialog from "../components/VendorDialog";
+import NavbarRider from "../components/NavbarRider";
+import moment from "moment";
+import { MdSearchOff } from "react-icons/md";
 
 function RiderOrders() {
-  // ใช้สำหรับนำทางไปหน้าอื่น
-  const navigate = useNavigate()
-  // ตัวแปรสำหรับ React โดยตัวแรกคือ ข้อมูล ตัวที่สองคือ function สำหรับการ set ค่าให้กับตัวแปร
-  const [orders, setOrders] = useState([])
-
   // กำหนดการเปิด ปิด ของ Dialog สำหรับตอนหน้าจอ Mobile
-  const [open, setOpen] = useState(false)
+  const [dialog, setDialog] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [vendorInfo, setVendorInfo] = useState(null);
+  const { token, vendor } = useAuth();
+  const navigate = useNavigate();
 
-  // ดึงข้อมูลจาก API เพื่อเรียกดูข้อมูล orders ทั้งหมดของ rider คนนั้นๆ
-  const fetchAllOrders = async () => {
+  const getVendorInfo = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/orders")
-      setOrders(response.data)
+      const { data } = await api.get("/vendor/" + vendor.id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(data);
+      setVendorInfo(data);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
-  // useEffect จะทำงานในทุกครั้งที่ Component ถูก render
+  const fetchOrders = async () => {
+    try {
+      const { data } = await api.get("/order/rider/list", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(data);
+      setOrders(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const deleteOrder = async (order_id) => {
+    try {
+      const { data } = await api.delete("/order/" + order_id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(data);
+      fetchAllOrders();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const confirmOrder = async (id) => {
+    try {
+      const { data } = await api.get(`/order/vendor/${id}/confirm`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(data);
+      fetchAllOrders();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleConfirm = (id) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-confirm ",
+        cancelButton: "btn btn-cancel",
+      },
+      buttonsStyling: false,
+    });
+    swalWithBootstrapButtons
+      .fire({
+        text: "คุณต้องการจะยืนยันออเดอร์ใช่หรือไม่",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "ใช่ ยืนยัน!",
+        cancelButtonText: "ยกเลิก",
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          confirmOrder(id);
+          return;
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          return;
+        }
+      });
+  };
+
+  const handleDelete = (id) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-confirm ",
+        cancelButton: "btn btn-cancel",
+      },
+      buttonsStyling: false,
+    });
+    swalWithBootstrapButtons
+      .fire({
+        text: "คุณต้องการจะลบออเดอร์นี้ใช่หรือไม่",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "ใช่ ลบเลย!",
+        cancelButtonText: "ยกเลิก",
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          deleteOrder(id);
+          return;
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          return;
+        }
+      });
+  };
+
   useEffect(() => {
-    // ทำงานในนี้ทุกครั้งที่ หน้า จอถูก render ใหม่
-    fetchAllOrders()
-  }, [])
+    fetchOrders();
+  }, []);
 
   return (
-    <div>
-      {/* Main container */}
-      <Dialog open={open} setOpen={setOpen} />
-      <div className='flex flex-col h-svh'>
-
-        {/* Navbar */}
-        <button className='bg-[#f5ebdc] w-[100%] h-[50px] flex items-center shadow-md h-[64px] pl-6 '>
-          <div className='text-[35px] mr-6'>{'<'}</div>
-          <div className='text-[20px] font-semibold'>คนส่ง</div>
-        </button>
-
-        {/* Content Container*/}
-        <div className=' w-[100%] h-[100%] flex'>
-          {/* Sidebar Container*/}
-          <div className='bg-[#f5ebdc] pt-5 w-[300px] h-[100%] mr-2 flex flex-col pl-5 pr-5 justify-between sm:hidden'>
-            {/* top-menu */}
-            <div className='w-[100% flex flex-col gap-[26px]'>
-              <button className='bg-[#fff] h-[50px] text-[18px] shadow-md rounded-[10px] font-semibold '>
-                นาย ส่งด่วน ทันใจ
-              </button>
-              
-              <button className='bg-[#fff] h-[50px] shadow-md rounded-[10px] text-[15px] font-semibold flex items-center justify-center gap-4 text-[#714b3c]'>
-                <CgNotes className='text-[20px]' /> ข้อมูลส่วนตัว <IoIosArrowForward className='text-[25px]' />
-              </button>
-
-              <button className='bg-[#fff] h-[50px] shadow-md rounded-[10px] text-[15px] font-semibold flex items-center justify-center gap-4 text-[#714b3c]'>
-                <LuClipboardCheck className='text-[20px]' /> จำนวนออเดอร์ <IoIosArrowForward className='text-[25px]' />
-              </button>
-            </div>
-
-            {/* bottom-menu */}
-            <div className='w-[100%] flex flex-col mb-10'>
-              {/* Support category menu */}
-              <div className='font-semibold mb-3'>ความช่วยเหลือ และ สนับสนุน</div>
-              <button className='bg-[#fff] h-[46px] shadow-md rounded-[10px] text-[14px] font-semibold flex items-center justify-center gap-4 text-[#714b3c]'>
-                <LuClipboardCheck className='text-[20px]' /> ติดต่อเรา Rub Heew <IoIosArrowForward className='text-[25px]' />
-              </button>
-
-              {/* Account category menu */}
-              <div className='font-semibold mb-3 mt-4'>บัญชี</div>
-              {/* Profile Account  */}
-              <button className='bg-[#fff] h-[46px] shadow-md rounded-[10px] text-[14px] font-semibold flex items-center justify-center gap-4 text-[#714b3c] mb-2'>
-                <MdOutlineAccountBox className='text-[20px]' /> โปรไฟล์ส่วนตัว <IoIosArrowForward className='text-[25px]' />
-              </button>
-              {/* Bank Account */}
-              <button className='bg-[#fff] h-[46px] shadow-md rounded-[10px] text-[14px] font-semibold flex items-center justify-center gap-4 text-[#714b3c]'>
-                <RiBankLine className='text-[20px]' /> บัญชีธนาคาร <IoIosArrowForward className='text-[25px]' />
-              </button>
+    <div className="bg-[#fcfcf9] h-[100vh]">
+      <NavbarRider open={dialog} setOpen={setDialog} />
+      <div className="flex w-[100%] items-center justify-center flex-col ">
+        <div className="mb-6">รายออเดอร์ของคุณ</div>
+        {orders.length == 0 && (
+          <div className="mt-7 flex rounded-sm justify-center items-center h-[300px] w-[80%]">
+            <div className="flex flex-col justify-center items-center">
+              <MdSearchOff className="text-[100px] text-[#00000030]" />
+              <div className="text-[#00000030] text-[13px] font-semibold">
+                ไม่พบรายการออเดอร์ของคุณ
+              </div>
             </div>
           </div>
-
-          {/* Order container */}
-
-          <div className='w-[100%] h-[100%] sm:pt-10 p-20 px-32 md:px-5 sm:px-5 flex flex-col gap-3'>
-            <div className=' cursor-pointer w-[100%] h-[30px] hidden sm:block' onClick={() => {
-              setOpen(!open)
-            }}>
-              <HiMenuAlt1 className='text-[30px] text-gray-500' />
-            </div>
-            {/* นำ Orders ทั้งหมดมา map เพื่อแสดงรายการ order ของ rider ทั้งหมด */}
+        )}
+        <div className="sm:w-[100%]">
+          <div className="grid gap-2 grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 sm:flex sm:flex-col items-center justify-center w-[100%]">
             {orders.map((order, index) => {
               return (
-                <div key={index} className='gap-2 flex flex-col text-[24px] text-[15px] h-max p-3 w-[100%] bg-[#f5ebdc] shadow-sm rounded-md flex items-center justify-between px-6'>
-                  <div className="flex items-start w-[100%] mb-2">
-                    <div className='text-[#714b3c] font-semibold text-[20px]'>ออเดอร์ {order.id}</div>
-                  </div>
-                  <div className="flex items-start w-[100%] items-center">
-                    <div className='text-[#714b3c] font-semibold text-[15px] flex gap-3 items-center'><div className="text-sm font-normal">ปลายทาง : </div> <div>{order.destination}</div></div>
-                  </div>
-                  <div className="flex items-start w-[100%] items-center">
-                    <div className='text-[#714b3c] font-semibold text-[15px] flex gap-3 items-center'><div className="text-sm font-normal">เบอร์ติดต่อ ผู้รับ : </div> <div>{order.phone_number}</div></div>
-                  </div>
-                  <div className="flex w-[100%] justify-end">
-                    <button
-                      onClick={() => {
-                        // นำทางไปหน้า Confirm Order สำหรับ rider ด้วย order id เมื่อคลิก
-                        navigate("/rider-order/" + order.id)
-                      }}
-                      className='bg-[#927364] text-white text-[14px] h-[35px] px-[15px] rounded-md'>
-                      เสร็จสิ้น
-                    </button>
-                  </div>
-                </div>
-              )
-            })}
+                <div
+                  className="bg-[#fff] shadow-sm p-3 w-[300px] md:grid-cols-3 sm:grid-cols-2 sm:w-[90%] border-[1px]"
+                  key={index}
+                >
+                  <div
+                    className="flex justify-between cursor-pointer"
+                    onClick={() => {
+                      navigate("/rider/order/" + order?.id);
+                    }}
+                  >
+                    <div className="flex flex-col">
+                      <div className="flex gap-2 items-center justify-center">
+                        <div
+                          className="text-sm"
+                          onClick={() => {
+                            navigate("/rider/order/" + order.id);
+                          }}
+                        >
+                          {order?.vendor?.vendor_name}
+                        </div>
+                      </div>
 
+                      <div
+                        className="text-[#f54749]"
+                        onClick={() => {
+                          navigate("/rider/order/" + order.id);
+                        }}
+                      >
+                        {order?.total_price} บาท
+                      </div>
+                    </div>
+
+                    <div className="w-[50px]">
+                      {order?.slip_image ? (
+                        <img
+                          onClick={() => {
+                            navigate("/rider/order/" + order?.id);
+                          }}
+                          className="w-[50px] h-[70px]"
+                          src={`http://localhost:5000/image/slip/${order.slip_image}`}
+                        ></img>
+                      ) : (
+                        <div className="w-[50px] h-[70px] "></div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="bg-[#e5e5e5] w-[100%] h-[1px] my-2"></div>
+
+                  <div className="flex gap-4 mb-1 text-sm">
+                    สถานะ{" "}
+                    <div
+                      className={`text-sm flex items-center text-purple-600 capitalize`}
+                    >
+                      {order?.status === "pending" && "รอดำเนินการ"}
+                      {order?.status === "confirmed" && "ยืนยันแล้ว"}
+                      {order?.status === "preparing" && "อยู่ในครัว"}
+                      {order?.status === "out_for_delivery" &&
+                        "คนขับกำลังนำคำสั่งซื้อไปส่ง..."}
+                      {order?.status === "delivered" &&
+                        "ลูกค้าได้รับสินค้าเรียบร้อย"}
+                      {/* // "pending",
+                      // "confirmed",
+                      // "preparing",
+                      // "out_for_delivery",
+                      // "delivered",
+                      // "cancelled" */}
+                    </div>
+                  </div>
+                  <div className="flex gap-4 mb-1 text-sm">
+                    ออเดอร์{""}
+                    <div className={`text-sm flex items-center text-blue-600`}>
+                      {order?.order_items?.length} รายการ
+                    </div>
+                  </div>
+                  <div className="flex gap-4 mb-1 text-sm">
+                    ปลายทาง{""}
+                    <div className={`text-sm flex items-center text-blue-600`}>
+                      {order?.destination?.destination_name}
+                    </div>
+                  </div>
+                  <div className="flex gap-4 mb-1 text-sm">
+                    ชื่อผู้รับ{""}
+                    <div className={`text-sm flex items-center text-blue-600`}>
+                      {order?.customer?.fname}-{order?.customer?.lname}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4 mb-1 text-sm">
+                    เมื่อ{""}
+                    <div className={`text-sm flex items-center text-blue-600`}>
+                      {moment(order?.createdAt)
+                        .add(543, "year")
+                        .format("DD/MM/YYYY h:mm")}
+                    </div>
+                  </div>
+
+                  {/* <div className="flex gap-4 mb-1 text-sm">
+                    ประเภท{" "}
+                    <div className="bg-[#f5474a1c] rounded-lg flex w-fit px-4 text-[#f54749] text-[13.7px] shadow-sm border-[#f5474a28] border-[1px]">
+                      {m.category.category_name}
+                    </div>
+                  </div> */}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default RiderOrders
+export default RiderOrders;

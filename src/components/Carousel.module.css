@@ -1,0 +1,7 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* เพิ่มสไตล์ที่คุณต้องการ */
+.carouselContainer {
+  /* ตัวอย่าง: เพิ่ม padding รอบ Carousel */
+  padding: 20px;
+}

@@ -116,7 +116,7 @@ function OrderStatus() {
   return (
     <div>
       {/* Navbar */}
-      <button className="bg-[#f5ebdc] w-[100%] h-[50px] flex items-center shadow-md h-[64px] pl-6 ">
+      <button className="bg-[#f5ebdc] w-[100%] flex items-center shadow-md h-[64px] pl-6 ">
         <div className="text-[35px] mr-6">{"<"}</div>
         <div className="text-[20px] font-semibold">ก๋วยเตี๋ยวหมูสด</div>
       </button>

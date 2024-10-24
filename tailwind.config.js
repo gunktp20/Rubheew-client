@@ -5,6 +5,7 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     screens: {
+
       sm: { min: "0px", max: "600px" },
 
       md: { min: "601px", max: "1023px" },

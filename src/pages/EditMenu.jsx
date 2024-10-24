@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import api from "../service/api";
 import { useAuth } from "../context/AuthContext";
 import NavbarVendor from "../components/NavbarVendor";
+import VendorDialog from "../components/VendorDialog";
 
 function EditMenu() {
   const { menu_id } = useParams();
@@ -22,12 +23,32 @@ function EditMenu() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(data)
+      console.log(data);
       setMenuName(data?.menu_name);
       setCategoryId(data?.category_id);
       setPrice(data?.price);
+      setPreview("http://localhost:5000/image/menu/" + data?.image);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState("");
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    setSelectedFile(file);
+    // เช็คว่ามีไฟล์หรือไม่
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreview("");
     }
   };
 
@@ -38,24 +59,24 @@ function EditMenu() {
       return setError("กรุณากรอกข้อมูลให้ครบถ้วน");
     }
 
+    const formData = new FormData();
+
+    formData.append("menu_name", menu_name);
+    formData.append("category_id", category_id);
+    formData.append("price", price);
+    formData.append("image", selectedFile);
+
     try {
-      const { data } = await api.put(
-        "/menu/" + menu_id,
-        {
-          menu_name,
-          category_id,
-          price,
+      const { data } = await api.put("/menu/" + menu_id, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      });
       console.log(data);
       setSuccess("แก้ไขรายละเอียด เมนูของคุณ เสร็จสิ้น");
     } catch (err) {
-        console.log(err)
+      console.log(err);
       setError(
         err.response.data.msg || "มีบางอย่างผิดพลาด กรุณาลองใหม่ในภายหลัง"
       );
@@ -66,11 +87,14 @@ function EditMenu() {
     fetchMenuInfo();
   }, []);
 
+  const [dialog, setDialog] = useState(false);
+
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center bg-[#fcfcf9] h-[100vh]">
       {/* <Navbar /> */}
-      <NavbarVendor />
-      <div className="flex flex-col justify-center items-center w-[400px] bg-purple-50 gap-3 p-5 border-[2px]">
+      <VendorDialog open={dialog} setOpen={setDialog} />
+      <NavbarVendor open={dialog} setOpen={setDialog} />
+      <div className="flex flex-col justify-center items-center w-[430px] bg-[#fff] gap-3 p-5 border-[1px] shadow-sm rounded-sm">
         <div className="text-xl">แก้ไขเมนูอาหาร</div>
 
         {success && (
@@ -91,7 +115,7 @@ function EditMenu() {
             setMenuName(e.target.value);
           }}
           name="menu_name"
-          className="w-[100%] h-[32px] pl-2"
+          className="text-sm w-[100%] h-[32px] pl-2 border-[1px] rounded-sm border-[#00000031]"
         ></input>
         <input
           placeholder="ประเภทอาหาร"
@@ -101,7 +125,7 @@ function EditMenu() {
             setCategoryId(e.target.value);
           }}
           name="category_id"
-          className="w-[100%] h-[32px] pl-2"
+          className="text-sm w-[100%] h-[32px] pl-2 border-[1px] rounded-sm border-[#00000031]"
         ></input>
         <input
           placeholder="ราคา"
@@ -111,12 +135,36 @@ function EditMenu() {
             setPrice(e.target.value);
           }}
           name="price"
-          className="w-[100%] h-[32px] pl-2"
+          className="text-sm w-[100%] h-[32px] pl-2 border-[1px] rounded-sm border-[#00000031]"
         ></input>
+
+        <div class="grid w-full items-center gap-4 mt-2">
+          <label class="text-sm text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            อัพโหลดรูปภาพเมนูอาหาร
+          </label>
+          <input
+            class="flex w-full rounded-md border border-[#f54749] border-input bg-white text-sm text-gray-400 file:border-0 file:bg-[#f54749] file:text-white file:text-sm file:font-medium"
+            type="file"
+            id="picture"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </div>
+
+        {preview && (
+          <div>
+            <h3 className="text-sm mb-2">รูปภาพปัจจุบัน</h3>
+            <img
+              src={`${preview}`}
+              alt="Preview"
+              style={{ maxWidth: "300px", maxHeight: "300px" }}
+            />
+          </div>
+        )}
 
         <button
           onClick={updateMenu}
-          className="bg-purple-300 text-white w-[100%] h-[32px]"
+          className="bg-[#f54749] text-white w-[100%] h-[32px]"
         >
           อัพเดทเมนูอาหาร
         </button>
