@@ -28,6 +28,7 @@ function RiderOrder() {
   const [note, setNote] = useState("");
 
   const [selectedFile, setSelectedFile] = useState(null);
+  const [position, setPosition] = useState(null);
   const [preview, setPreview] = useState("");
 
   const handleFileChange = (event) => {
@@ -67,6 +68,10 @@ function RiderOrder() {
       if (data?.delivery_image) {
         setPreview("http://localhost:5000/image/delivery/" + data?.delivery_image);
       }
+      setPosition({
+        lat: Number(data?.destination?.lat),
+        lng: Number(data?.destination?.lng)
+      });
       setOrder(data);
     } catch (err) {
       console.log(err);
@@ -143,18 +148,18 @@ function RiderOrder() {
         <div className="mt-8 border-[1px] gap-5 border-[#dfdfdf] flex bg-[#fff] w-[700px] shadow-sm rounded-md p-5 py-6 sm:w-[90%] h-fit sm:flex-col">
           {/* google map */}
           <LoadScript
-            googleMapsApiKey={"AIzaSyDakKAIrjvqKRXzVvOfJut27nHbJ94SMTo"}
+            googleMapsApiKey={"AIzaSyC-9AuCqJG-9jstHnaM1CX5BM3Kza_mSQc"}
             libraries={["places"]}
             loadingElement={<div>Loading...</div>}
           >
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
-              center={dd?.position}
+              center={position}
               zoom={15}
               options={mapOptions}
             >
               {/* <Marker position={origin} /> */}
-              <Marker position={dd?.position} />
+              <Marker position={position} />
 
               {/* {directionsResponse && <DirectionsRenderer directions={directionsResponse} />} */}
             </GoogleMap>

@@ -51,6 +51,12 @@ function Order() {
       console.log(data);
       setActiveStep();
       setOrder(data);
+      console.log(Number(data?.destination?.lat))
+      console.log(Number(data?.destination?.lng))
+      setPosition({
+        lat: Number(data?.destination?.lat),
+        lng: Number(data?.destination?.lng)
+      });
 
       if (data?.status === "pending" && !data?.slip_image) {
         navigate("/qr-payment/" + order_id);
@@ -145,6 +151,8 @@ function Order() {
     marginRight: "30px",
   };
 
+  const [position, setPosition] = useState();
+
   return (
     <div className="w-[100%] flex flex-col bg-[#fcfcf9] h-[100vh]">
       <NavbarCustomer />
@@ -155,18 +163,18 @@ function Order() {
         <div className="mt-8 border-[1px] gap-5 border-[#dfdfdf] flex bg-[#fff] w-[700px] shadow-sm rounded-md p-5 py-6 sm:w-[90%] h-fit sm:flex-col">
           {/* google map */}
           <LoadScript
-            googleMapsApiKey={"AIzaSyDakKAIrjvqKRXzVvOfJut27nHbJ94SMTo"}
+            googleMapsApiKey={"AIzaSyC-9AuCqJG-9jstHnaM1CX5BM3Kza_mSQc"}
             libraries={["places"]}
             loadingElement={<div>Loading...</div>}
           >
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
-              center={dd?.position}
+              center={position}
               zoom={15}
               options={mapOptions}
             >
               {/* <Marker position={origin} /> */}
-              <Marker position={dd?.position} />
+              <Marker position={position} />
 
               {/* {directionsResponse && <DirectionsRenderer directions={directionsResponse} />} */}
             </GoogleMap>
@@ -222,7 +230,7 @@ function Order() {
                     </Step>
                   ))}
                 </Stepper>
-                
+
                 {order?.status !== "delivered" && (
                   <button
                     onClick={() => {
