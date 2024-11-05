@@ -57,6 +57,17 @@ function RiderOrder() {
     }
   };
 
+  const [deliveryCost, setDeliveryCost] = useState(0);
+
+  const fetchDeliveryCost = async () => {
+    try {
+      const { data } = await api.get("/delivery-cost");
+      setDeliveryCost(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const getOrderInfo = async () => {
     try {
       const { data } = await api.get("/rider/order/" + order_id, {
@@ -108,6 +119,7 @@ function RiderOrder() {
   useEffect(() => {
     getOrderInfo();
     fetchOrderById();
+    fetchDeliveryCost()
   }, []);
 
   const mapOptions = {
@@ -208,7 +220,7 @@ function RiderOrder() {
                     <div className="flex justify-between items-center w-[100%] mt-7">
                       <div className="text-sm">ยอดรวมทั้งหมด</div>
                       <div className="text-sm mt- text-[#f54749] font-semibold">
-                        {order?.total_price + 15}.00 บาท
+                      {(order?.total_price + deliveryCost).toFixed(2)}{" "}
                       </div>
                     </div>
                   </div>
