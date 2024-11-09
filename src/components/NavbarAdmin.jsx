@@ -1,19 +1,31 @@
 import { useNavigate, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { AiFillTool } from "react-icons/ai";
-import { GoChecklist } from "react-icons/go";
-import { memo, useEffect } from "react";
-import api from "../service/api";
-import { FaUser } from "react-icons/fa6";
+import React, { memo } from "react";
 import { HiMenuAlt1 } from "react-icons/hi";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { FaUserCircle } from "react-icons/fa";
 
 function NavbarAdmin({ open, setOpen }) {
-  const { logout } = useAuth();
+  const { logout , admin} = useAuth();
   const navigate = useNavigate();
+
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenUserMenu = () => {
+    setAnchorElUser(true);
+  };
 
   const onLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   return (
@@ -80,14 +92,44 @@ function NavbarAdmin({ open, setOpen }) {
         </NavLink>
       </div>
 
-      <button
-        className="text-white"
-        onClick={() => {
-          onLogout();
-        }}
-      >
-        ออกจากระบบ
-      </button>
+      <Box sx={{ flexGrow: 0 }}>
+        <Box
+          onClick={() => {
+            handleOpenUserMenu();
+          }}
+          className="px-4 py-1  rounded-md bg-[#d53e40] sm:bg-transparent text-white cursor-pointer gap-2 flex items-center"
+        >
+          <FaUserCircle className="w-[20px] h-[20px] sm:w-[25px] sm:h-[25px]" />
+          <div className="sm:hidden">{admin.username}</div>
+        </Box>
+        <Menu
+          sx={{ mt: "45px" }}
+          id="menu-appbar"
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={Boolean(anchorElUser)}
+          onClose={handleCloseUserMenu}
+        >
+          <MenuItem
+            onClick={() => {
+              handleCloseUserMenu();
+              onLogout();
+            }}
+          >
+            <Typography sx={{ textAlign: "center", fontSize: "13px" }}>
+              ออกจากระบบ
+            </Typography>
+          </MenuItem>
+        </Menu>
+      </Box>
     </div>
   );
 }

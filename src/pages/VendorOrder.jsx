@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import VendorDialog from "../components/VendorDialog";
+import Footer from "../components/Footer";
 
 function VendorOrder() {
   // กำหนดการเปิด ปิด ของ Dialog สำหรับตอนหน้าจอ Mobile
@@ -414,6 +415,7 @@ function VendorOrder() {
           </div>
         </div>
       </div>
+      <Footer position={"relative"}/>
     </div>
   );
 }

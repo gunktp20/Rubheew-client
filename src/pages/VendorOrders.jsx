@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import VendorDialog from "../components/VendorDialog";
 import moment from "moment";
 import { MdSearchOff } from "react-icons/md";
+import Footer from "../components/Footer";
 
 function VendorOrders() {
   // กำหนดการเปิด ปิด ของ Dialog สำหรับตอนหน้าจอ Mobile
@@ -258,6 +259,7 @@ function VendorOrders() {
           </div>
         </div>
       </div>
+      <Footer position={"relative"}/>
     </div>
   );
 }

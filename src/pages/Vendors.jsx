@@ -10,6 +10,7 @@ import { useAuth } from "../context/AuthContext";
 import NavbarVendor from "../components/NavbarVendor";
 import NavbarRider from "../components/NavbarRider";
 import NavbarAdmin from "../components/NavbarAdmin";
+import Footer from "../components/Footer";
 import CarouselRubheew from "../components/CarouselRubheew";
 import TailwindCarousel from "../components/TailwindCarousel.jsx";
 import Slider from "react-slick";
@@ -158,11 +159,12 @@ function Vendors() {
   }, [selectedCategory]);
 
   return (
-    <div className="flex flex-col h-[100%] bg-[#fcfcf9] pb-10 overflow-hidden">
+    <div className="flex flex-col h-[100%] bg-[#fcfcf9] overflow-hidden relative">
       {vendor && <NavbarVendor />}
       {rider && <NavbarRider />}
       {customer && <NavbarCustomer />}
       {admin && <NavbarAdmin />}
+      
       {/* <CarouselRubheew /> */}
       <TailwindCarousel />
 
@@ -264,7 +266,7 @@ function Vendors() {
           {vendors.map((vendor, index) => {
             return (
               <div
-                className="bg-white shadow-sm p-3 w-[200px] sm:w-[100%] border-[1px]"
+                className="hover:shadow-md cursor-pointer transition-all bg-white shadow-sm p-3 w-[200px] sm:w-[100%] border-[1px]"
                 key={index}
                 onClick={() => {
                   navigate(`/vendor/${vendor.id}/`);
@@ -294,6 +296,8 @@ function Vendors() {
 
         {/* end container */}
       </div>
+
+      <Footer position={"relative"}/>
     </div>
   );
 }

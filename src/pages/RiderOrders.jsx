@@ -7,6 +7,8 @@ import VendorDialog from "../components/VendorDialog";
 import NavbarRider from "../components/NavbarRider";
 import moment from "moment";
 import { MdSearchOff } from "react-icons/md";
+import RiderDialog from "../components/RiderDialog"
+import Footer from "../components/Footer";
 
 function RiderOrders() {
   // กำหนดการเปิด ปิด ของ Dialog สำหรับตอนหน้าจอ Mobile
@@ -139,6 +141,7 @@ function RiderOrders() {
   return (
     <div className="bg-[#fcfcf9] h-[100vh]">
       <NavbarRider open={dialog} setOpen={setDialog} />
+      <RiderDialog open={dialog} setOpen={setDialog}/>
       <div className="flex w-[100%] items-center justify-center flex-col ">
         <div className="mb-6">รายออเดอร์ของคุณ</div>
         {orders.length == 0 && (
@@ -264,6 +267,7 @@ function RiderOrders() {
           </div>
         </div>
       </div>
+      <Footer position={"relative"}/>
     </div>
   );
 }

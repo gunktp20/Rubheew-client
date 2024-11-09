@@ -9,6 +9,7 @@ import { MdSearchOff } from "react-icons/md";
 import NavbarAdmin from "../components/NavbarAdmin";
 import AdminDialog from "../components/AdminDialog";
 import moment from "moment";
+import Footer from "../components/Footer";
 
 function AdminVendorsRegistrations() {
   // กำหนดการเปิด ปิด ของ Dialog สำหรับตอนหน้าจอ Mobile
@@ -254,6 +255,7 @@ function AdminVendorsRegistrations() {
           </div>
         </div>
       </div>
+      <Footer position={"relative"}/>
     </div>
   );
 }

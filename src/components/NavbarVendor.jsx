@@ -5,6 +5,13 @@ import api from "../service/api";
 import { useEffect, useState } from "react";
 import { HiMenuAlt1 } from "react-icons/hi";
 import { BiSolidStore } from "react-icons/bi";
+import { FaUserCircle } from "react-icons/fa";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 
 function NavbarVendor({ open, setOpen }) {
   const { logout, vendor, token } = useAuth();
@@ -17,6 +24,16 @@ function NavbarVendor({ open, setOpen }) {
 
   const [vendorInfo, setVendorInfo] = useState(true);
   const [pendingOrders, setPendingOrders] = useState([]);
+  
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
+  const handleOpenUserMenu = () => {
+    setAnchorElUser(true);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
 
   const getVendorInfo = async () => {
     try {
@@ -131,15 +148,47 @@ function NavbarVendor({ open, setOpen }) {
           {vendorInfo?.open ? "เปิดให้บริการ" : "ปิดให้บริการ"}
         </button>
 
-        <button
-          className="text-white"
+        <Box sx={{ flexGrow: 0 }}>
+        <Box
           onClick={() => {
-            onLogout();
+            handleOpenUserMenu();
           }}
+          className="px-4 py-1  rounded-md bg-[#d53e40] sm:hidden  text-white cursor-pointer gap-2 flex items-center"
         >
-          ออกจากระบบ
-        </button>
+          <img src={`http://localhost:5000/image/vendor/${vendorInfo?.image}`} className="w-[25px] h-[25px] rounded-full border-[1px] border-[#fff]"></img>
+          {vendorInfo.vendor_name}
+        </Box>
+        <Menu
+          sx={{ mt: "45px" }}
+          id="menu-appbar"
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={Boolean(anchorElUser)}
+          onClose={handleCloseUserMenu}
+        >
+          <MenuItem
+            onClick={() => {
+              handleCloseUserMenu();
+              onLogout();
+            }}
+          >
+            <Typography sx={{ textAlign: "center", fontSize: "13px" }}>
+              ออกจากระบบ
+            </Typography>
+          </MenuItem>
+        </Menu>
+      </Box>
+
       </div>
+
     </div>
   );
 }

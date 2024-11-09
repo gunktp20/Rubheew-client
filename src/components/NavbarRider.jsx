@@ -2,17 +2,33 @@ import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from "../service/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { HiMenuAlt1 } from "react-icons/hi";
 import { MdDeliveryDining } from "react-icons/md";
+import { FaUserCircle } from "react-icons/fa";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 
 function NavbarRider({ open, setOpen }) {
-  const { logout } = useAuth();
+  const { logout , rider } = useAuth();
   const navigate = useNavigate();
 
   const onLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
+  const handleOpenUserMenu = () => {
+    setAnchorElUser(true);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   //   const [vendorInfo, setVendorInfo] = useState(true);
@@ -51,9 +67,9 @@ function NavbarRider({ open, setOpen }) {
     <div className="z-[10] flex gap-4 bg-[#f54749] w-[100%] p-4 text-[12px] mb-5 justify-between">
       <div
         className=" cursor-pointer hidden sm:block h-fit"
-        // onClick={() => {
-        //   setOpen(!open);
-        // }}
+        onClick={() => {
+          setOpen(!open);
+        }}
       >
         <HiMenuAlt1 className="text-[25px] text-white" />
       </div>
@@ -100,16 +116,44 @@ function NavbarRider({ open, setOpen }) {
         </NavLink> */}
       </div>
 
-      <div className="flex">
-        <button
-          className="text-white"
+      <Box sx={{ flexGrow: 0 }}>
+        <Box
           onClick={() => {
-            onLogout();
+            handleOpenUserMenu();
           }}
+          className="px-4 py-1  rounded-md bg-[#d53e40] sm:hidden  text-white cursor-pointer gap-2 flex items-center"
         >
-          ออกจากระบบ
-        </button>
-      </div>
+          <FaUserCircle className="w-[20px] h-[20px] " />
+          {rider.fname}-{rider.lname}
+        </Box>
+        <Menu
+          sx={{ mt: "45px" }}
+          id="menu-appbar"
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={Boolean(anchorElUser)}
+          onClose={handleCloseUserMenu}
+        >
+          <MenuItem
+            onClick={() => {
+              handleCloseUserMenu();
+              onLogout();
+            }}
+          >
+            <Typography sx={{ textAlign: "center", fontSize: "13px" }}>
+              ออกจากระบบ
+            </Typography>
+          </MenuItem>
+        </Menu>
+      </Box>
     </div>
   );
 }

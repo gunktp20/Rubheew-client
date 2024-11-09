@@ -8,6 +8,7 @@ import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import Swal from "sweetalert2";
 import VendorDialog from "../components/VendorDialog";
+import Footer from "../components/Footer";
 
 function VendorInformationManagement() {
   const { token, vendor } = useAuth();
@@ -149,6 +150,7 @@ function VendorInformationManagement() {
           บันทึก
         </button>
       </div>
+      <Footer position={"relative"}/>
     </div>
   );
 }

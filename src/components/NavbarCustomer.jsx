@@ -2,18 +2,34 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { BsCart2 } from "react-icons/bs";
 import { GoChecklist } from "react-icons/go";
-import { memo, useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import api from "../service/api";
-import { FaUser } from "react-icons/fa6";
+import { FaUserCircle } from "react-icons/fa";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 
 function NavbarCustomer() {
-  const { logout, cartItemsNumber, setCartItemsNumber } = useAuth();
+  const { logout, cartItemsNumber, setCartItemsNumber, customer } = useAuth();
   const navigate = useNavigate();
   const { token, vendor, rider } = useAuth();
+
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenUserMenu = () => {
+    setAnchorElUser(true);
+  };
 
   const onLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   const getCartItemsNumber = async () => {
@@ -67,7 +83,9 @@ function NavbarCustomer() {
         </div> */}
 
         <div
-          className={`${vendor || rider ? "hidden" : "cursor-pointer"} sm:hidden`}
+          className={`${
+            vendor || rider ? "hidden" : "cursor-pointer"
+          } sm:hidden`}
           onClick={() => {
             navigate("/orders");
           }}
@@ -77,7 +95,7 @@ function NavbarCustomer() {
       </div>
       <div
         className={`${
-          vendor || rider ? "hidden" : "h-[100%] w-[1px] bg-[#ffffff67]"
+          customer ? "h-[100%] w-[1px] bg-[#ffffff67] " : "hidden"
         }`}
       ></div>
 
@@ -100,7 +118,9 @@ function NavbarCustomer() {
           </div>
         </div>
         <div
-          className={`${vendor || rider ? "hidden" : "cursor-pointer"} sm:hidden`}
+          className={`${
+            vendor || rider ? "hidden" : "cursor-pointer"
+          } sm:hidden`}
           onClick={() => {
             navigate("/cart");
           }}
@@ -109,14 +129,44 @@ function NavbarCustomer() {
         </div>
       </div>
 
-      <button
-        className="text-white"
-        onClick={() => {
-          onLogout();
-        }}
-      >
-        ออกจากระบบ
-      </button>
+      <Box sx={{ flexGrow: 0 }}>
+        <Box
+          onClick={() => {
+            handleOpenUserMenu();
+          }}
+          className="px-4 py-1  rounded-md bg-[#d53e40] sm:hidden  text-white cursor-pointer gap-2 flex items-center"
+        >
+          <FaUserCircle className="w-[20px] h-[20px] " />
+          {customer.fname}-{customer.lname}
+        </Box>
+        <Menu
+          sx={{ mt: "45px" }}
+          id="menu-appbar"
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={Boolean(anchorElUser)}
+          onClose={handleCloseUserMenu}
+        >
+          <MenuItem
+            onClick={() => {
+              handleCloseUserMenu();
+              onLogout();
+            }}
+          >
+            <Typography sx={{ textAlign: "center", fontSize: "13px" }}>
+              ออกจากระบบ
+            </Typography>
+          </MenuItem>
+        </Menu>
+      </Box>
     </div>
   );
 }

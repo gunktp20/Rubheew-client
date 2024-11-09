@@ -9,6 +9,7 @@ import { IoClose } from "react-icons/io5";
 import NavbarVendor from "../components/NavbarVendor";
 import NavbarRider from "../components/NavbarRider";
 import NavbarAdmin from "../components/NavbarAdmin";
+import Footer from "../components/Footer"
 
 function Vendor() {
   const { vendor_id } = useParams();
@@ -74,7 +75,7 @@ function Vendor() {
   }, []);
 
   return (
-    <div className="flex flex-col h-[100vh] bg-[#fcfcf9]">
+    <div className="flex flex-col h-[100%] bg-[#fcfcf9]">
       {vendor && <NavbarVendor />}
       {rider && <NavbarRider />}
       {customer && <NavbarCustomer />}
@@ -153,7 +154,7 @@ function Vendor() {
             {menus.map((m, index) => {
               return (
                 <div
-                  className="bg-white shadow-sm p-3 w-[200px] border-[1px]"
+                  className="hover:shadow-md cursor-pointer transition-all bg-white shadow-sm p-3 w-[200px] border-[1px]"
                   key={index}
                 >
                   <div>
@@ -172,7 +173,7 @@ function Vendor() {
                     {m.category.category_name}
                   </div>
 
-                  {(!vendor || !rider) && (
+                  {customer && (
                     <button
                       onClick={() => {
                         insertMenuToCart(m.id);
@@ -188,6 +189,7 @@ function Vendor() {
           </div>
         </div>
       </div>
+            <Footer position={"relative"}/>
     </div>
   );
 }

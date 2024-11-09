@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import VendorDialog from "../components/VendorDialog";
+import Footer from "../components/Footer";
 import { MdSearchOff } from "react-icons/md";
 
 function MenuManagement() {
@@ -175,6 +176,7 @@ function MenuManagement() {
           </div>
         </div>
       </div>
+      <Footer position={"relative"}/>
     </div>
   );
 }

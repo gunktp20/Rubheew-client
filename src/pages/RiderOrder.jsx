@@ -15,6 +15,8 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Typography from "@mui/material/Typography";
 import NavbarRider from "../components/NavbarRider";
+import RiderDialog from "../components/RiderDialog";
+import Footer from "../components/Footer";
 
 function RiderOrder() {
   const { order_id } = useParams();
@@ -152,7 +154,7 @@ function RiderOrder() {
   return (
     <div className="bg-[#fcfcf9] h-[100vh]">
       <NavbarRider open={dialog} setOpen={setDialog} />
-
+      <RiderDialog open={dialog} setOpen={setDialog}/>
       <div className="flex w-[100%] items-center justify-center flex-col ">
         <div className="mb-6">รายการออเดอร์ของคุณ</div>
 
@@ -343,6 +345,7 @@ function RiderOrder() {
 
         {/* end container */}
       </div>
+      <Footer position={"relative"}/>
     </div>
   );
 }

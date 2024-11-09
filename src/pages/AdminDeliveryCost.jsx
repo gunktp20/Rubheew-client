@@ -9,6 +9,7 @@ import { MdSearchOff } from "react-icons/md";
 import NavbarAdmin from "../components/NavbarAdmin";
 import AdminDialog from "../components/AdminDialog";
 import moment from "moment";
+import Footer from "../components/Footer";
 
 function AdminDeliveryCost() {
   // กำหนดการเปิด ปิด ของ Dialog สำหรับตอนหน้าจอ Mobile
@@ -181,6 +182,7 @@ function AdminDeliveryCost() {
           {/* end */}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }

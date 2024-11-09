@@ -16,6 +16,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Typography from "@mui/material/Typography";
 import Swal from "sweetalert2";
+import Footer from "../components/Footer"
 
 const steps = [
   {
@@ -154,7 +155,7 @@ function Order() {
   const [position, setPosition] = useState();
 
   return (
-    <div className="w-[100%] flex flex-col bg-[#fcfcf9] h-[100vh]">
+    <div className="w-[100%] flex flex-col bg-[#fcfcf9] h-[100%]">
       <NavbarCustomer />
       <div className="flex w-[100%] items-center justify-center flex-col ">
         <div className="mb-6">รายการออเดอร์ของคุณ</div>
@@ -320,6 +321,7 @@ function Order() {
 
         {/* end container */}
       </div>
+      <Footer position={"relative"}/>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
 import Swal from "sweetalert2";
+import Footer from "../components/Footer"
 import { MdSearchOff } from "react-icons/md";
 
 function Cart() {
@@ -287,6 +288,7 @@ function Cart() {
           })}
         </div>
       </div>
+      <Footer position={"relative"}/>
     </div>
   );
 }

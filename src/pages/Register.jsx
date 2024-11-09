@@ -5,6 +5,8 @@ import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
 import Dialogg from "../components/Dialog";
 import wallpaper from "../assets/images/wall.jpg"
+import Footer from "../components/Footer"
+import handGripSmartphone from "../assets/images/hands-grip-smartphone-food-delivery-app-open-food-containers-hands-grip-smartphone-food-delivery-app-open-food-339865821.webp"
 
 function Register() {
   const { token } = useAuth();
@@ -54,7 +56,7 @@ function Register() {
       console.log(err);
       setError(
         err?.response?.data?.msg || "มีบางอย่างผิดพลาด กรุณาลองใหม่ในภายหลัง"
-      );
+      );+
       setIsLoading(false);
     }
   };
@@ -73,7 +75,7 @@ function Register() {
   };
 
   return (
-    <div className="flex flex-col items-center h-[100vh] bg-[#fcfcf9]">
+    <div className="flex flex-col items-center h-[100vh] bg-[#fcfcf9] sm:h-[100%]">
       {/* <div className="w-[100%] h-[100%] flex absolute ">
         <div className="bg-[#000000ab] w-[100%] h-[100%] absolute"></div>
         <img
@@ -84,7 +86,17 @@ function Register() {
 
       <Navbar open={dialog} setOpen={setDialog} />
       <Dialogg open={dialog} setOpen={setDialog} />
-      <div className="flex flex-col justify-center items-center w-[430px] bg-white gap-3 p-5 border-[1px] shadow-sm rounded-sm z-[10]">
+
+      <div className="flex h-[530px] bg-red-500 rounded-md overflow-hidden sm:h-fit">
+        <div className="flex relative items-center justify-center sm:hidden">
+          <div className="bg-[#00000095] absolute w-[100%] h-[100%]"></div>
+          <div className="text-white absolute w-[330px]">
+            <div className="text-2xl">ยินดีต้อนรับเข้าสู่ Rubheew</div>
+            <div className="text-sm mt-3">แพลตฟอร์มให้บริการจัดส่งอาหาร สำหรับทั้ง ลูกค้าและ ผู้ประกอบการ</div>
+          </div>
+          <img src={handGripSmartphone} className="w-[400px] object-cover"></img>
+        </div>
+        <div className="flex flex-col justify-center items-center w-[430px] bg-white gap-3 p-5 border-[1px] shadow-sm rounded-sm z-[10]">
         <div className="text-xl">สมัครสมาชิก</div>
 
         {success && (
@@ -189,10 +201,20 @@ function Register() {
             "สมัครสมาชิก"
           )}
         </button>
-        <NavLink to="/login" className="text-sm">
-          สลับไป เข้าสู่ระบบ
-        </NavLink>
+        
+        <div className="flex items-center gap-2 text-sm">
+          <div>หากคุณยังมีบัญชีลูกค้า</div>
+          <NavLink to="/login" className="text-sm text-[#f54749]">
+             เข้าสู่ระบบ
+          </NavLink>
+        </div>
       </div>
+
+        </div>
+      
+    
+          <Footer position={"relative"}/>
+
     </div>
   );
 }

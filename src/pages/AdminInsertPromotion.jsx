@@ -7,6 +7,7 @@ import NavbarVendor from "../components/NavbarVendor";
 import VendorDialog from "../components/VendorDialog";
 import NavbarAdmin from "../components/NavbarAdmin";
 import AdminDialog from "../components/AdminDialog";
+import Footer from "../components/Footer";
 
 function AdminInsertPromotion() {
   const { token } = useAuth();
@@ -145,6 +146,7 @@ function AdminInsertPromotion() {
           บันทึก
         </button>
       </div>
+      <Footer/>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
 import NavbarVendor from "../components/NavbarVendor";
 import VendorDialog from "../components/VendorDialog";
+import Footer from "../components/Footer";
 
 function InsertMenu() {
   const { token } = useAuth();
@@ -171,6 +172,7 @@ function InsertMenu() {
           เพิ่มเมนูอาหาร
         </button>
       </div>
+      <Footer/>
     </div>
   );
 }

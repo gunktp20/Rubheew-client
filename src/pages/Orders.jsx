@@ -4,6 +4,7 @@ import api from "../service/api";
 import NavbarCustomer from "../components/NavbarCustomer";
 import { useNavigate } from "react-router-dom";
 import { MdSearchOff } from "react-icons/md";
+import Footer from "../components/Footer"
 
 function Orders() {
   const { token } = useAuth();
@@ -158,6 +159,7 @@ function Orders() {
           </div>
         </div>
       </div>
+      <Footer position={"relative"}/>
     </div>
   );
 }

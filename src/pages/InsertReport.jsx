@@ -6,6 +6,7 @@ import NavbarCustomer from "../components/NavbarCustomer";
 import NavbarVendor from "../components/NavbarVendor";
 import NavbarAdmin from "../components/NavbarAdmin";
 import NavbarRider from "../components/NavbarRider";
+import Footer from "../components/Footer";
 
 function InsertReport() {
   const { token, vendor, customer, rider, admin } = useAuth();
@@ -92,6 +93,7 @@ function InsertReport() {
           ส่งรายงาน
         </button>
       </div>
+      <Footer/>
     </div>
   );
 }

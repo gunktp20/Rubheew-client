@@ -4,6 +4,7 @@ import api from "../service/api";
 import { useAuth } from "../context/AuthContext";
 import NavbarVendor from "../components/NavbarVendor";
 import VendorDialog from "../components/VendorDialog";
+import Footer from "../components/Footer";
 
 function EditMenu() {
   const { menu_id } = useParams();
@@ -169,6 +170,7 @@ function EditMenu() {
           อัพเดทเมนูอาหาร
         </button>
       </div>
+      <Footer position={"relative"}/>
     </div>
   );
 }

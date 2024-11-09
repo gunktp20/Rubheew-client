@@ -6,6 +6,9 @@ import Navbar from "../components/Navbar";
 import Dialogg from "../components/Dialog";
 import wallpaper from "../assets/images/wall.jpg"
 
+import Footer from "../components/Footer"
+import handGripSmartphone from "../assets/images/hands-grip-smartphone-food-delivery-app-open-food-containers-hands-grip-smartphone-food-delivery-app-open-food-339865821.webp"
+
 function AdminLogin() {
   const { setAdminCredentials, token } = useAuth();
 
@@ -108,6 +111,7 @@ function AdminLogin() {
           เข้าสู่ระบบ
         </button>
       </div>
+      <Footer/>
     </div>
   );
 }

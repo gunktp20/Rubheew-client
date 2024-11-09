@@ -8,6 +8,7 @@ import VendorDialog from "../components/VendorDialog";
 import { MdSearchOff } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import Swal from "sweetalert2";
+import Footer from "../components/Footer";
 
 function InsertRider() {
   const { token } = useAuth();
@@ -262,6 +263,7 @@ function InsertRider() {
         )}
         {/*  */}
       </div>
+      <Footer position={"relative"}/>
     </div>
   );
 }
